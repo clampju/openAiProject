@@ -25,4 +25,8 @@ project-config:
   # 开启图片回复的前缀
   imageCreatePrefix: ["画", "找", "生成...图"]
 
-
+wx-constant:
+  appId: xx
+  appSecret: xx
+  serverToken: openaiproject4869
+  accessToken: xx

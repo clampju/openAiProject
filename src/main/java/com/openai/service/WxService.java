@@ -1,27 +1,29 @@
 package com.openai.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.openai.config.Constant;
-import com.openai.service.WxService;
+import com.openai.config.WxConstant;
 import com.openai.utils.CommonUtil;
 import com.openai.utils.HttpUtil;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 
 @Service
 public class WxService{
+    @Resource
+    private WxConstant wxConstant;
 
 //    @Scheduled(cron = "0 0 0/2 * * ? *")
 //    @PostConstruct
     public String refreshToken() {
-        String url = Constant.WX_HOST + "/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
-        url = String.format(url, Constant.APP_ID, Constant.APP_SECRET);
+        String url = wxConstant.getWxHost() + "/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
+        url = String.format(url, wxConstant.getAppId(), wxConstant.getAppSecret());
         JSONObject result = HttpUtil.getForJson(url);
-        Constant.ACCESS_TOKEN = result.getString("access_token");
-        return Constant.ACCESS_TOKEN;
+        wxConstant.setAccessToken(result.getString("access_token"));
+        return wxConstant.getAccessToken();
     }
 
     /**
@@ -33,7 +35,7 @@ public class WxService{
      * @return
      */
     public String checkSignature(String signature, String timestamp, String nonce, String echostr) {
-        String[] arr = new String[]{Constant.SERVER_TOKEN, timestamp, nonce};
+        String[] arr = new String[]{wxConstant.getServerToken(), timestamp, nonce};
         // 将token、timestamp、nonce三个参数进行字典序排序
         CommonUtil.sort(arr);
         StringBuilder content = new StringBuilder();

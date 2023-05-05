@@ -7,4 +7,11 @@ Content-Type: application/json
 }
 
 ###
+POST https://openaiproject-production.up.railway.app/openai/chatCompletion
+Content-Type: application/json
+
+{
+  "userId": "222222",
+  "prompt": "生成一只小鸟的图片"
+}
 
