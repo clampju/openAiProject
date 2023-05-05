@@ -14,9 +14,9 @@ server:
 #      prefix: /
 
 chatgpt:
-  token:
-  proxy-host: 127.0.0.1
-  proxy-port:
+  token: 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
+#  proxy-host: 127.0.0.1
+#  proxy-port:
   session-expiration-time: 30
 
 project-config:
