@@ -24,7 +24,7 @@ public class TestOpenAI {
         Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1",19180));
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor(new OpenAILogger());
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = OpenAiProxyService.defaultClient("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",Duration.ofSeconds(10L))
+        OkHttpClient client = OpenAiProxyService.defaultClient("",Duration.ofSeconds(10L))
                                 .newBuilder()
                                 .proxy(proxy)
                                 .addInterceptor(httpLoggingInterceptor)
