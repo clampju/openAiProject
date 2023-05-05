@@ -28,10 +28,8 @@ public class WXByOpenAiController {
      * @return java.lang.String
      */
     @GetMapping("/callback")
-    public String callback(@RequestParam("signature") String signature,
-                          @RequestParam("timestamp") String timestamp,
-                          @RequestParam("nonce") String nonce,
-                          @RequestParam("echostr") String echostr) {
+    @ResponseBody
+    public String callback(String signature,String timestamp,String nonce,String echostr) {
         return wxService.checkSignature(signature, timestamp, nonce, echostr);
     }
 
