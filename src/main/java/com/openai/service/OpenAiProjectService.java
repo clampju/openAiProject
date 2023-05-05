@@ -6,6 +6,10 @@ import com.openai.config.OpenAiProjectConfig;
 import com.openai.domain.WeiXinMsgDTO;
 import com.openai.domain.WeiXinMsgVO;
 import com.openai.utils.CommonUtil;
+import com.theokanning.openai.completion.chat.ChatCompletionRequest;
+import com.theokanning.openai.completion.chat.ChatMessage;
+import io.github.asleepyfish.config.ChatGPTProperties;
+import io.github.asleepyfish.enums.RoleEnum;
 import io.github.asleepyfish.util.OpenAiUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,6 +18,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
@@ -32,7 +37,12 @@ public class OpenAiProjectService {
             chatCompletion = OpenAiUtils.createImage(content,userId);
         }else{
             //调用聊天接口
-            chatCompletion = OpenAiUtils.createChatCompletion(content, userId);
+            chatCompletion = OpenAiUtils.createChatCompletion(ChatCompletionRequest.builder()
+                                            .model(openAiProjectConfig.getChatModel())
+                                            .messages(Collections.singletonList(new ChatMessage(RoleEnum.USER.getRoleName(), content)))
+                                            .user(userId)
+                                            .temperature(openAiProjectConfig.getTemperature())
+                                            .build());
         }
         log.warn("用户请求,用户:{},请求内容:{},返回内容:{}", userId, content, chatCompletion);
         return chatCompletion;
@@ -64,7 +74,12 @@ public class OpenAiProjectService {
             msgList = OpenAiUtils.createImage(params.getContent(),params.getFromUserName());
         }else {
             //调用聊天接口
-            msgList = OpenAiUtils.createChatCompletion(params.getContent(), params.getFromUserName());
+            msgList = OpenAiUtils.createChatCompletion(ChatCompletionRequest.builder()
+                            .model(openAiProjectConfig.getChatModel())
+                            .messages(Collections.singletonList(new ChatMessage(RoleEnum.USER.getRoleName(), params.getContent())))
+                            .user(params.getFromUserName())
+                            .temperature(openAiProjectConfig.getTemperature())
+                            .build());
         }
         for (int i = 0; i < msgList.size(); i++) {
             content.append(msgList.get(i));

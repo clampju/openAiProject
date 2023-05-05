@@ -14,12 +14,14 @@ server:
 #      prefix: /
 
 chatgpt:
-  token: 
+  token:
 #  proxy-host: 127.0.0.1
-#  proxy-port:
+#  proxy-port: 19180
   session-expiration-time: 30
 
 project-config:
+  chatModel: gpt-3.5-turbo
+  temperature: 0.8
   # 开启图片回复的前缀
   imageCreatePrefix: ["画", "找", "生成...图"]
 

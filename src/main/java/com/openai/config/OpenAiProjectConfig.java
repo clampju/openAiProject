@@ -11,4 +11,7 @@ import java.util.List;
 @ConfigurationProperties(prefix = "project-config")
 public class OpenAiProjectConfig {
     private List<String> imageCreatePrefix;
+
+    private String chatModel;
+    private Double temperature;
 }

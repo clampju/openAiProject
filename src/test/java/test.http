@@ -1,9 +1,9 @@
-POST https://openaiproject-production.up.railway.app/openai/chatCompletion
+POST http://localhost:8880/openai/chatCompletion
 Content-Type: application/json
 
 {
   "userId": "222222",
-  "prompt": "你知道eva新剧场版吗"
+  "prompt": "画一副高达"
 }
 
 ###
