@@ -4,13 +4,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.openai.config.WxConstant;
 import com.openai.utils.CommonUtil;
 import com.openai.utils.HttpUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-
+@Slf4j
 @Service
 public class WxService{
     @Resource
@@ -36,6 +37,7 @@ public class WxService{
      */
     public String checkSignature(String signature, String timestamp, String nonce, String echostr) {
         String[] arr = new String[]{wxConstant.getServerToken(), timestamp, nonce};
+        log.warn("--------weixin checkSignature:"+wxConstant.getServerToken()+","+arr);
         // 将token、timestamp、nonce三个参数进行字典序排序
         CommonUtil.sort(arr);
         StringBuilder content = new StringBuilder();

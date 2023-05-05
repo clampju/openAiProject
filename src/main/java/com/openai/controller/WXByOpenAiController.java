@@ -2,6 +2,7 @@ package com.openai.controller;
 
 import com.openai.service.OpenAiProjectService;
 import com.openai.service.WxService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -11,6 +12,7 @@ import java.io.PrintWriter;
 /**
  * chat gpt控制器
  */
+@Slf4j
 @RestController
 @RequestMapping("/wxbyopenai")
 public class WXByOpenAiController {
@@ -30,6 +32,7 @@ public class WXByOpenAiController {
     @GetMapping("/callback")
     @ResponseBody
     public String callback(String signature,String timestamp,String nonce,String echostr) {
+        log.warn("--------weixin request pam:"+signature+","+timestamp+","+nonce+","+echostr);
         return wxService.checkSignature(signature, timestamp, nonce, echostr);
     }
 
