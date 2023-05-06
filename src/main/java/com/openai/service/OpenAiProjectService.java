@@ -30,7 +30,7 @@ public class OpenAiProjectService {
     @Resource
     private OpenAiProjectConfig openAiProjectConfig;
 
-    public List<String> chat(String content, String userId) {
+    public List<String> getOpenaiMessageList(String userId,String content) {
         List<String> chatCompletion = new ArrayList<String>();
         if(CommonUtil.mateImageCreatePrefix(content,openAiProjectConfig.getImageCreatePrefix())){
             //调用画图接口
@@ -48,39 +48,9 @@ public class OpenAiProjectService {
         return chatCompletion;
     }
 
-    public WeiXinMsgVO chat(WeiXinMsgDTO params) {
-        String content = getMsgList(params);
-        return new WeiXinMsgVO(System.currentTimeMillis(),
-                params.getToUserName(), params.getFromUserName(),
-                "text", content.toString());
-    }
-
-    public String chat(HttpServletRequest request) {
-        JSONObject jsonObject = CommonUtil.xmlToJson(request);
-        WeiXinMsgDTO params = JSON.parseObject(jsonObject.toJSONString(), WeiXinMsgDTO.class);
-        String content = "感谢关注!";
-        if (StringUtils.hasLength(params.getContent())) {
-            content = getMsgList(params);
-        }
-        log.warn("公众号用户请求,用户:{},请求内容:{},返回内容:{}", params.getFromUserName(), params.getContent(), content);
-        return getResult(jsonObject, content);
-    }
-
-    private String getMsgList(WeiXinMsgDTO params) {
+    public String getOpenaiMessage(String userId,String promptContent) {
         StringBuilder content = new StringBuilder();
-        List<String> msgList = new ArrayList<String>();
-        if(CommonUtil.mateImageCreatePrefix(params.getContent(),openAiProjectConfig.getImageCreatePrefix())){
-            //调用画图接口
-            msgList = OpenAiUtils.createImage(params.getContent(),params.getFromUserName());
-        }else {
-            //调用聊天接口
-            msgList = OpenAiUtils.createChatCompletion(ChatCompletionRequest.builder()
-                            .model(openAiProjectConfig.getChatModel())
-                            .messages(Collections.singletonList(new ChatMessage(RoleEnum.USER.getRoleName(), params.getContent())))
-                            .user(params.getFromUserName())
-                            .temperature(openAiProjectConfig.getTemperature())
-                            .build());
-        }
+        List<String> msgList = getOpenaiMessageList(userId,promptContent);
         for (int i = 0; i < msgList.size(); i++) {
             content.append(msgList.get(i));
             if (i < msgList.size() - 1) {
@@ -89,14 +59,4 @@ public class OpenAiProjectService {
         }
         return content.toString();
     }
-
-
-    private String getResult(JSONObject jsonObject, String content) {
-        return "<xml>" + "<ToUserName><![CDATA[" + jsonObject.getString("FromUserName") + "]]></ToUserName>"
-                + "<FromUserName><![CDATA[" + jsonObject.getString("ToUserName") + "]]></FromUserName>" + "<CreateTime>"
-                + System.currentTimeMillis() + "</CreateTime>" + "<MsgType><![CDATA[text]]></MsgType>"
-                + "<Content><![CDATA[" + new String(content.getBytes(), ISO_8859_1) + "]]></Content></xml>";
-    }
-
-
 }

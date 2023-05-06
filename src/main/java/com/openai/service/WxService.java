@@ -2,20 +2,27 @@ package com.openai.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.openai.config.WxConstant;
+import com.openai.domain.WeiXinMsgDTO;
+import com.openai.domain.WeiXinMsgVO;
 import com.openai.utils.CommonUtil;
 import com.openai.utils.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import static java.nio.charset.StandardCharsets.ISO_8859_1;
 
 @Slf4j
 @Service
 public class WxService{
     @Resource
     private WxConstant wxConstant;
+    @Resource
+    private OpenAiProjectService openAiProjectService;
 
 //    @Scheduled(cron = "0 0 0/2 * * ? *")
 //    @PostConstruct
@@ -64,6 +71,31 @@ public class WxService{
         }
         return "error";
 
+    }
+
+    public WeiXinMsgVO getOpenaiMessageToWXVO(WeiXinMsgDTO params) {
+        String content = "感谢关注!";
+        if (params!=null && StringUtils.hasLength(params.getContent())) {
+            content = openAiProjectService.getOpenaiMessage(params.getFromUserName(),params.getContent());
+        }
+        return new WeiXinMsgVO(System.currentTimeMillis(),
+                params.getToUserName(), params.getFromUserName(),
+                "text", content.toString());
+    }
+
+    public String getOpenaiMessageByWX(WeiXinMsgDTO params) {
+        String content = "感谢关注!";
+        if (params!=null && StringUtils.hasLength(params.getContent())) {
+            content = openAiProjectService.getOpenaiMessage(params.getFromUserName(),params.getContent());
+        }
+        return getResult(params, content);
+    }
+
+    private String getResult(WeiXinMsgDTO params, String content) {
+        return "<xml>" + "<ToUserName><![CDATA[" + params.getFromUserName() + "]]></ToUserName>"
+                + "<FromUserName><![CDATA[" + params.getToUserName() + "]]></FromUserName>" + "<CreateTime>"
+                + System.currentTimeMillis() + "</CreateTime>" + "<MsgType><![CDATA[text]]></MsgType>"
+                + "<Content><![CDATA[" + new String(content.getBytes(), ISO_8859_1) + "]]></Content></xml>";
     }
 
 }

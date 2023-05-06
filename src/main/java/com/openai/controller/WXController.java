@@ -1,7 +1,11 @@
 package com.openai.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.openai.domain.WeiXinMsgDTO;
 import com.openai.service.OpenAiProjectService;
 import com.openai.service.WxService;
+import com.openai.utils.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +19,7 @@ import java.io.PrintWriter;
 @Slf4j
 @RestController
 @RequestMapping("/wxbyopenai")
-public class WXByOpenAiController {
-    @Resource
-    private OpenAiProjectService openAiProjectService;
+public class WXController {
     @Resource
     private WxService wxService;
 
@@ -44,7 +46,9 @@ public class WXByOpenAiController {
      */
     @PostMapping("/callback")
     public void callback(HttpServletRequest request, PrintWriter pw) {
-        pw.write(openAiProjectService.chat(request));
+        JSONObject jsonObject = CommonUtil.xmlToJson(request);
+        WeiXinMsgDTO params = JSON.parseObject(jsonObject.toJSONString(), WeiXinMsgDTO.class);
+        pw.write(wxService.getOpenaiMessageByWX(params));
     }
 
 

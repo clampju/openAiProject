@@ -26,7 +26,7 @@ project-config:
   imageCreatePrefix: ["画", "找", "生成...图"]
 
 wx-constant:
-  appId: xx
-  appSecret: xx
+  appId: wx1af99d271f110da2
+  appSecret: da2a6a10bf3eecff92536c2fe57b34cf
   serverToken: openaiproject4869
   accessToken: xx
