@@ -33,7 +33,7 @@ public class DingTalkService {
                 OapiRobotSendRequest.Markdown markdown = new OapiRobotSendRequest.Markdown();
                 request.setMsgtype("markdown");
                 markdown.setTitle("");
-                markdown.setText("#### ![screenshot]("+message+")\\n");
+                markdown.setText("![screenshot]("+message+")\\n");
                 request.setMarkdown(markdown);
             }
             response = callbackRobots(request,sessionWebhook);
