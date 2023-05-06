@@ -30,13 +30,11 @@ public class DingTalkService {
                 text.setContent(message);
                 request.setText(text);
             }else if(msgtype.equals("image")){
-                OapiRobotSendRequest.Link link = new OapiRobotSendRequest.Link();
+                OapiRobotSendRequest.Markdown markdown = new OapiRobotSendRequest.Markdown();
                 request.setMsgtype("link");
-                link.setTitle("下面是我生成的图片");
-                link.setText("下面是我生成的图片");
-                link.setPicUrl(message);
-                link.setMessageUrl(message);
-                request.setLink(link);
+                markdown.setTitle("下面是我生成的图片");
+                markdown.setText("![screenshot]("+message+")\\n");
+                request.setMarkdown(markdown);
             }
             response = callbackRobots(request,sessionWebhook);
         }
