@@ -6,7 +6,6 @@ import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiRobotSendRequest;
 import com.dingtalk.api.response.OapiRobotSendResponse;
 import com.openai.service.DingTalkService;
-import com.openai.utils.CommonUtil;
 import com.openai.utils.FastJsonUtils;
 import com.taobao.api.ApiException;
 import lombok.extern.slf4j.Slf4j;
@@ -28,25 +27,24 @@ public class DingTalkController {
     private DingTalkService dingTalkService;
 
     @RequestMapping("/callback")
-    //public void helloRobots(@RequestBody(required = false) JSONObject json) {
-        public void helloRobots(HttpServletRequest request) {
-        log.warn("--------DingTalk request pam:"+ FastJsonUtils.toJSONString(request.getParameterMap()));
-//        String content = json.getJSONObject("text").get("content").toString().replaceAll(" ", "");
-//        if ("text".equals(json.getString("msgtype"))) {
-//            OapiRobotSendRequest.Text text = new OapiRobotSendRequest.Text();
-//            String message = dingTalkService.getOpenaiMessageByDT(json.getString("senderId"),content);
-//            text.setContent(message);
-//            try {
-//                String sessionWebhook = json.getString("sessionWebhook");
-//                DingTalkClient client = new DefaultDingTalkClient(sessionWebhook);
-//                OapiRobotSendRequest request = new OapiRobotSendRequest();
-//                request.setMsgtype("text");
-//                request.setText(text);
-//                OapiRobotSendResponse response = client.execute(request);
-//                log.warn("--------DingTalk response pam:"+ response.getBody());
-//            } catch (ApiException e) {
-//                e.printStackTrace();
-//            }
-//        }
+    public void helloRobots(@RequestBody(required = false) JSONObject json) {
+        log.warn("--------DingTalk request pam:"+ FastJsonUtils.toJSONString(json));
+        String content = json.getJSONObject("text").get("content").toString().replaceAll(" ", "");
+        if ("text".equals(json.getString("msgtype"))) {
+            OapiRobotSendRequest.Text text = new OapiRobotSendRequest.Text();
+            String message = dingTalkService.getOpenaiMessageByDT(json.getString("senderId"),content);
+            text.setContent(message);
+            try {
+                String sessionWebhook = json.getString("sessionWebhook");
+                DingTalkClient client = new DefaultDingTalkClient(sessionWebhook);
+                OapiRobotSendRequest request = new OapiRobotSendRequest();
+                request.setMsgtype("text");
+                request.setText(text);
+                OapiRobotSendResponse response = client.execute(request);
+                log.warn("--------DingTalk response pam:"+ response.getBody());
+            } catch (ApiException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
