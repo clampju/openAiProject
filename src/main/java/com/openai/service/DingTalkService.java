@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiRobotSendRequest;
+import com.dingtalk.api.response.OapiRobotSendResponse;
 import com.openai.domain.WeiXinMsgDTO;
 import com.openai.utils.CommonUtil;
+import com.taobao.api.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -17,14 +19,38 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @Service
 public class DingTalkService {
-    @Resource
-    private OpenAiProjectService openAiProjectService;
 
-    public String getOpenaiMessageByDT(String userid,String content) {
-        String msgContent = null;
-        if (StringUtils.hasLength(userid) && StringUtils.hasLength(content)) {
-            msgContent = openAiProjectService.getOpenaiMessage("dingtalk_"+userid,content);
+    public OapiRobotSendResponse callbackRobots(String sessionWebhook,String msgtype,String message){
+        OapiRobotSendResponse response = null;
+        if (StringUtils.hasLength(sessionWebhook) && StringUtils.hasLength(msgtype) && StringUtils.hasLength(message)) {
+            OapiRobotSendRequest request = new OapiRobotSendRequest();
+            request.setMsgtype(msgtype);
+            if(msgtype.equals("text")){
+                OapiRobotSendRequest.Text text = new OapiRobotSendRequest.Text();
+                text.setContent(message);
+                request.setText(text);
+            }else if(msgtype.equals("image")){
+                OapiRobotSendRequest.Markdown markdown = new OapiRobotSendRequest.Markdown();
+                markdown.setTitle("");
+                markdown.setText("#### ![screenshot]("+message+")\\n");
+                request.setMarkdown(markdown);
+            }
+            response = callbackRobots(request,sessionWebhook);
         }
-        return msgContent;
+        return response;
+    }
+
+    public OapiRobotSendResponse callbackRobots(OapiRobotSendRequest request,String sessionWebhook){
+        OapiRobotSendResponse response = null;
+        if(StringUtils.hasLength(sessionWebhook) && request!=null){
+            try {
+                DingTalkClient client = new DefaultDingTalkClient(sessionWebhook);
+                response = client.execute(request);
+            } catch (ApiException e) {
+                e.printStackTrace();
+            }
+            log.warn("--------DingTalk callbackRobots response pam:"+ (response!=null?response.getBody():null));
+        }
+        return response;
     }
 }

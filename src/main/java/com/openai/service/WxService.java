@@ -73,20 +73,20 @@ public class WxService{
 
     }
 
-    public WeiXinMsgVO getOpenaiMessageToWXVO(WeiXinMsgDTO params) {
-        String content = "感谢关注!";
-        if (params!=null && StringUtils.hasLength(params.getContent())) {
-            content = openAiProjectService.getOpenaiMessage(params.getFromUserName(),params.getContent());
-        }
-        return new WeiXinMsgVO(System.currentTimeMillis(),
-                params.getToUserName(), params.getFromUserName(),
-                "text", content.toString());
-    }
+//    public WeiXinMsgVO getOpenaiMessageToWXVO(WeiXinMsgDTO params) {
+//        String content = "感谢关注!";
+//        if (params!=null && StringUtils.hasLength(params.getContent())) {
+//            content = openAiProjectService.getOpenaiMessage(params.getFromUserName(),params.getContent());
+//        }
+//        return new WeiXinMsgVO(System.currentTimeMillis(),
+//                params.getToUserName(), params.getFromUserName(),
+//                "text", content.toString());
+//    }
 
-    public String getOpenaiMessageByWX(WeiXinMsgDTO params) {
+    public String callbackRobots(WeiXinMsgDTO params) {
         String content = "感谢关注!";
         if (params!=null && StringUtils.hasLength(params.getContent())) {
-            content = openAiProjectService.getOpenaiMessage(params.getFromUserName(),params.getContent());
+            content = openAiProjectService.getOpenaiCompletionMsg(params.getFromUserName(),params.getContent());
         }
         return getResult(params, content);
     }

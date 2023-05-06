@@ -48,7 +48,7 @@ public class WXController {
     public void callback(HttpServletRequest request, PrintWriter pw) {
         JSONObject jsonObject = CommonUtil.xmlToJson(request);
         WeiXinMsgDTO params = JSON.parseObject(jsonObject.toJSONString(), WeiXinMsgDTO.class);
-        pw.write(wxService.getOpenaiMessageByWX(params));
+        pw.write(wxService.callbackRobots(params));
     }
 
 
