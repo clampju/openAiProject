@@ -23,6 +23,6 @@ public class OpenAiProjectController {
     @PostMapping("/chatCompletion")
     @ResponseBody
     public List<String> chatCompletion(@RequestBody ChatCompletion chatCompletion) {
-        return openAiProjectService.getOpenaiMessageList(chatCompletion.getPrompt(),chatCompletion.getUserId());
+        return openAiProjectService.getOpenaiMessageList(chatCompletion.getUserId(),chatCompletion.getPrompt());
     }
 }

@@ -15,6 +15,6 @@ Content-Type: application/json
 
 {
   "userId": "222222",
-  "prompt": "生成一只小鸟的图片"
+  "prompt": "如何学习java"
 }
 
