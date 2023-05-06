@@ -30,7 +30,7 @@ public class DingTalkController {
     @RequestMapping("/callback")
     //public void helloRobots(@RequestBody(required = false) JSONObject json) {
         public void helloRobots(HttpServletRequest request) {
-        log.warn("--------DingTalk request pam:"+ FastJsonUtils.toJSONString(request));
+        log.warn("--------DingTalk request pam:"+ FastJsonUtils.toJSONString(request.getParameterMap()));
 //        String content = json.getJSONObject("text").get("content").toString().replaceAll(" ", "");
 //        if ("text".equals(json.getString("msgtype"))) {
 //            OapiRobotSendRequest.Text text = new OapiRobotSendRequest.Text();
