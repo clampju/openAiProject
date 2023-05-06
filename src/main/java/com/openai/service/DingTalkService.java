@@ -31,7 +31,7 @@ public class DingTalkService {
                 request.setText(text);
             }else if(msgtype.equals("image")){
                 OapiRobotSendRequest.Markdown markdown = new OapiRobotSendRequest.Markdown();
-                request.setMsgtype("link");
+                request.setMsgtype("markdown");
                 markdown.setTitle("下面是我生成的图片");
                 markdown.setText("![]("+message+")");
                 request.setMarkdown(markdown);
