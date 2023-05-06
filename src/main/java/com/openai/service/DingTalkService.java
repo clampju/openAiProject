@@ -32,8 +32,8 @@ public class DingTalkService {
             }else if(msgtype.equals("image")){
                 OapiRobotSendRequest.Link link = new OapiRobotSendRequest.Link();
                 request.setMsgtype("link");
-                link.setTitle("");
-                link.setText("");
+                link.setTitle("下面是我生成的图片");
+                link.setText("下面是我生成的图片");
                 link.setPicUrl(message);
                 link.setMessageUrl(message);
                 request.setLink(link);
