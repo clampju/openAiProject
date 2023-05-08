@@ -1,27 +1,19 @@
 package com.openai.service;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+
 import com.openai.config.OpenAiProjectConfig;
-import com.openai.domain.WeiXinMsgDTO;
-import com.openai.domain.WeiXinMsgVO;
-import com.openai.utils.CommonUtil;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatMessage;
-import io.github.asleepyfish.config.ChatGPTProperties;
 import io.github.asleepyfish.enums.RoleEnum;
 import io.github.asleepyfish.util.OpenAiUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import static java.nio.charset.StandardCharsets.ISO_8859_1;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -29,6 +21,7 @@ import static java.nio.charset.StandardCharsets.ISO_8859_1;
 public class OpenAiProjectService {
     @Resource
     private OpenAiProjectConfig openAiProjectConfig;
+    private static final List<String> IMAGE_COMMAND_PREFIX = Arrays.asList("画", "找");
 
     /**
      * 生成图片接口----默认生成1张图片
@@ -64,4 +57,6 @@ public class OpenAiProjectService {
         }
         return content.toString();
     }
+
+
 }

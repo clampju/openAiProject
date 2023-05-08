@@ -1,20 +1,32 @@
 GET https://openaiproject-production.up.railway.app/wxbyopenai/callback?signature=99
 
 ###
-POST http://localhost:8880/openai/chatCompletion
+POST http://localhost:8880/v1/chat/completions
 Content-Type: application/json
 
 {
-  "userId": "222222",
-  "prompt": "如何学习java"
+  "stream":true,
+  "max_tokens":2048,
+  "temperature":0.6,
+  "messages":[
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role":"user","content":"如何学习java"}
+  ],
+  "model":"gpt-3.5-turbo"
 }
 
 ###
-POST https://openaiproject-production.up.railway.app/openai/chatCompletion
+POST https://openaiproject-production.up.railway.app/v1/chat/completions
 Content-Type: application/json
 
 {
-  "userId": "222222",
-  "prompt": "如何学习java"
+  "stream":true,
+  "max_tokens":2048,
+  "temperature":0.6,
+  "messages":[
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role":"user","content":"你是谁"}
+  ],
+  "model":"gpt-3.5-turbo"
 }
 

@@ -65,6 +65,12 @@
             <artifactId>chatgpt</artifactId>
             <version>1.1.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.theokanning.openai-gpt3-java</groupId>
+            <artifactId>service</artifactId>
+            <version>0.12.0</version>
+        </dependency>
+
 
         <dependency>
             <groupId>dom4j</groupId>

@@ -1,19 +1,15 @@
 package com.openai.controller;
 
-import com.openai.config.OpenAiProjectConfig;
-import com.openai.model.ChatCompletion;
 import com.openai.model.ChatCompletionRequestX;
 import com.openai.service.OpenAiProjectService;
+import com.theokanning.openai.completion.chat.ChatCompletionChunk;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatCompletionResult;
-import com.theokanning.openai.completion.chat.ChatMessage;
 import com.theokanning.openai.service.OpenAiService;
-import io.github.asleepyfish.enums.RoleEnum;
+import io.reactivex.Flowable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * chat gpt控制器
@@ -30,14 +26,25 @@ public class OpenAiProjectController {
      */
     @PostMapping("/completions")
     @ResponseBody
-    public ChatCompletionResult chatCompletion(@RequestBody ChatCompletionRequestX chatCompletionRequestX) {
-        System.out.println("------------------------------"+chatCompletionRequestX.getModel());
-        return openAiService.createChatCompletion(ChatCompletionRequest.builder()
-                .model(chatCompletionRequestX.getModel())
-                .messages(chatCompletionRequestX.getMessages())
-                .user(chatCompletionRequestX.getUser())
-                .temperature(chatCompletionRequestX.getTemperature())
-                .build());
+    public void chatCompletion(@RequestBody ChatCompletionRequestX chatCompletionRequestX) {
+        System.out.println("------------------------------"+chatCompletionRequestX.getModel()+","+chatCompletionRequestX.getStream());
+       openAiService.streamChatCompletion(ChatCompletionRequest.builder()
+                        .model(chatCompletionRequestX.getModel())
+                        .messages(chatCompletionRequestX.getMessages())
+                        .user(chatCompletionRequestX.getUser())
+                        .temperature(chatCompletionRequestX.getTemperature())
+                        .stream(chatCompletionRequestX.getStream())
+                        .build())
+                .doOnError(Throwable::printStackTrace)
+                .blockingForEach(System.out::println);
+//        return openAiService.createChatCompletion(ChatCompletionRequest.builder()
+//                .model(chatCompletionRequestX.getModel())
+//                .messages(chatCompletionRequestX.getMessages())
+//                .user(chatCompletionRequestX.getUser())
+//                .temperature(chatCompletionRequestX.getTemperature())
+//                .stream(chatCompletionRequestX.getStream())
+//                .build());
         //return openAiProjectService.getOpenaiCompletionMsgList(chatCompletion.getUserId(),chatCompletion.getPrompt());
     }
+
 }
