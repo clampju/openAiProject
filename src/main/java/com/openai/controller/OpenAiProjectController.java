@@ -7,6 +7,7 @@ import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatCompletionResult;
 import com.theokanning.openai.service.OpenAiService;
 import io.reactivex.Flowable;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -24,8 +25,7 @@ public class OpenAiProjectController {
     /**
      * 简单聊天接口
      */
-    @PostMapping("/completions")
-    @ResponseBody
+    @PostMapping(value = "/completions",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public void chatCompletion(@RequestBody ChatCompletionRequestX chatCompletionRequestX) {
         System.out.println("------------------------------"+chatCompletionRequestX.getModel()+","+chatCompletionRequestX.getStream());
        openAiService.streamChatCompletion(ChatCompletionRequest.builder()
