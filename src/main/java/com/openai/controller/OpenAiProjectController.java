@@ -26,17 +26,17 @@ public class OpenAiProjectController {
      * 简单聊天接口
      */
     @PostMapping(value = "/completions",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public void chatCompletion(@RequestBody ChatCompletionRequestX chatCompletionRequestX) {
+    public Flowable<ChatCompletionChunk> chatCompletion(@RequestBody ChatCompletionRequestX chatCompletionRequestX) {
         System.out.println("------------------------------"+chatCompletionRequestX.getModel()+","+chatCompletionRequestX.getStream());
-       openAiService.streamChatCompletion(ChatCompletionRequest.builder()
+       return openAiService.streamChatCompletion(ChatCompletionRequest.builder()
                         .model(chatCompletionRequestX.getModel())
                         .messages(chatCompletionRequestX.getMessages())
                         .user(chatCompletionRequestX.getUser())
                         .temperature(chatCompletionRequestX.getTemperature())
                         .stream(chatCompletionRequestX.getStream())
-                        .build())
-                .doOnError(Throwable::printStackTrace)
-                .blockingForEach(System.out::println);
+                        .build());
+//                .doOnError(Throwable::printStackTrace)
+//                .blockingForEach(System.out::println);
 //        return openAiService.createChatCompletion(ChatCompletionRequest.builder()
 //                .model(chatCompletionRequestX.getModel())
 //                .messages(chatCompletionRequestX.getMessages())
